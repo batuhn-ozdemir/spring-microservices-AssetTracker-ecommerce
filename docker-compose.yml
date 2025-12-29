@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # ------------------------------------
+  # ALTYAPI (INFRASTRUCTURE)
+  # ------------------------------------
+  
+  # 1. Veritabanı (PostgreSQL)
+  postgres:
+    image: postgres:15-alpine
+    container_name: asset-postgres
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init-sql:/docker-entrypoint-initdb.d # auto DB creator script
+      - ./postgres-data:/var/lib/postgresql/data # for saving datas
+    networks:
+      - asset-network
+
+
+networks:
+  asset-network:
+    driver: bridge
