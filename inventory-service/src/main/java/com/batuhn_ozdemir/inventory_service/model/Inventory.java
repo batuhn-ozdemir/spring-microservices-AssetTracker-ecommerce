@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "t_inventory")
 @Getter
@@ -21,4 +23,8 @@ public class Inventory {
     private String skuCode;
 
     private int quantity;
+
+    private String productName;
+
+    private BigDecimal salePrice;
 }
