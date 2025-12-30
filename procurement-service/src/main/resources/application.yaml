@@ -1,3 +1,5 @@
 spring:
   application:
     name: procurement-service
+  profiles:
+    active: dev
