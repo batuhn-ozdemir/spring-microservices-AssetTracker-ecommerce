@@ -11,10 +11,30 @@ spring:
           uri: lb://inventory-service
           predicates:
               - Path=/api/inventory/**
+          filters:
+            - AuthenticationFilter
+
         - id: procurement-service
           uri: lb://procurement-service
           predicates:
               - Path=/api/procurement/**
+          filters:
+            - AuthenticationFilter
+
+
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+              - Path=/api/order/**
+          filters:
+            - AuthenticationFilter
+
+
+        - id: identity-service
+          uri: lb://identity-service
+          predicates:
+            - Path=/auth/**
+
 
 eureka:
   client:

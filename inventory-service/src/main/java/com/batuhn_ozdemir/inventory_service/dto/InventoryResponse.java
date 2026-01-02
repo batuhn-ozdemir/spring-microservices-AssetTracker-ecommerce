@@ -1,5 +1,6 @@
 package com.batuhn_ozdemir.inventory_service.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,8 @@ import java.math.BigDecimal;
 @Builder
 public class InventoryResponse {
     private String skuCode;
-    private boolean isInStock;
+    @JsonProperty("isInStock")
+    private Boolean inStock;
     private String productName;
     private BigDecimal salePrice;
     private Integer quantity;

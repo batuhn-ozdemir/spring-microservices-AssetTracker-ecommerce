@@ -3,7 +3,6 @@ package com.batuhn_ozdemir.inventory_service.controller;
 import com.batuhn_ozdemir.inventory_service.dto.InventoryRequest;
 import com.batuhn_ozdemir.inventory_service.dto.InventoryResponse;
 import com.batuhn_ozdemir.inventory_service.service.InventoryService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -26,5 +25,11 @@ public class InventoryController {
     @ResponseStatus(HttpStatus.OK)
     public List<InventoryResponse> checkStock(@RequestBody List<String> skuCodes) {
         return inventoryService.checkStock(skuCodes);
+    }
+
+    @PutMapping("/reduce")
+    @ResponseStatus(HttpStatus.OK)
+    public void reduceStock(@RequestParam String skuCode, @RequestParam Integer quantity) {
+        inventoryService.decreaseStock(skuCode, quantity);
     }
 }

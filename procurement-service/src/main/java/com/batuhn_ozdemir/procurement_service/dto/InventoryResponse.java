@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,4 +14,7 @@ import lombok.NoArgsConstructor;
 public class InventoryResponse {
     private String skuCode;
     private boolean isInStock;
+    private String productName;
+    private BigDecimal salePrice;
+    private Integer quantity;
 }

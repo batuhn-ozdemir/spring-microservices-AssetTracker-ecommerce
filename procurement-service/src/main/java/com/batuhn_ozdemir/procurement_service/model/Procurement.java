@@ -16,8 +16,8 @@ public class Procurement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String procurementNumber; // Sipariş No
+    private String procurementNumber;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<ProcurementLineItems> procurementLineItemsList; // Sipariş Kalemleri
+    private List<ProcurementLineItems> procurementLineItemsList;
 }

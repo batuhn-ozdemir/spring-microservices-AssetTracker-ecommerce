@@ -24,18 +24,16 @@ public class InventoryService {
             Inventory inventory = existingInventory.get();
             inventory.setQuantity(inventory.getQuantity() + inventoryRequest.getQuantity());
 
-            // Fiyat veya İsim değişmiş olabilir, onları da güncelle (Opsiyonel ama önerilir)
             inventory.setProductName(inventoryRequest.getProductName());
             inventory.setSalePrice(inventoryRequest.getSalePrice());
 
             inventoryRepository.save(inventory);
         } else {
-            // SENARYO B: Ürün yok -> Sıfırdan yeni kayıt oluştur
             Inventory inventory = new Inventory();
             inventory.setSkuCode(inventoryRequest.getSkuCode());
             inventory.setQuantity(inventoryRequest.getQuantity());
-            inventory.setProductName(inventoryRequest.getProductName()); // Yeni Alan
-            inventory.setSalePrice(inventoryRequest.getSalePrice());     // Yeni Alan
+            inventory.setProductName(inventoryRequest.getProductName());
+            inventory.setSalePrice(inventoryRequest.getSalePrice());
 
             inventoryRepository.save(inventory);
         }
@@ -44,30 +42,38 @@ public class InventoryService {
     @Transactional(readOnly = true)
     public List<InventoryResponse> checkStock(List<String> skuCodes) {
 
-        // Veritabanından toplu çekim
         List<Inventory> inventoryList = inventoryRepository.findBySkuCodeIn(skuCodes);
 
-        // İstek yapılan her bir SKU kodu için response oluştur
         return skuCodes.stream().map(sku -> {
 
-            // Memory içindeki listeden ilgili ürünü bul
             Inventory inventory = inventoryList.stream()
                     .filter(value -> value.getSkuCode().equals(sku))
                     .findFirst()
                     .orElse(null);
 
-            // Ürün varsa ve adedi 0'dan büyükse stokta var say
-            boolean inStock = inventory != null && inventory.getQuantity() > 0;
+            boolean inStockVar = inventory != null && inventory.getQuantity() > 0;
 
             return InventoryResponse.builder()
                     .skuCode(sku)
-                    .isInStock(inStock)
-                    // Eğer ürün bulunamazsa null dönmemek için kontrol ekliyoruz
+                    .inStock(inStockVar)
                     .productName(inventory != null ? inventory.getProductName() : null)
                     .salePrice(inventory != null ? inventory.getSalePrice() : null)
                     .quantity(inventory != null ? inventory.getQuantity() : 0)
                     .build();
 
         }).toList();
+    }
+
+    @Transactional
+    public void decreaseStock(String skuCode, Integer quantity) {
+        Inventory inventory = inventoryRepository.findBySkuCode(skuCode)
+                .orElseThrow(() -> new RuntimeException("Asset not found: " + skuCode));
+
+        if (inventory.getQuantity() < quantity) {
+            throw new RuntimeException("Out of stock! Asset: " + skuCode);
+        }
+
+        inventory.setQuantity(inventory.getQuantity() - quantity);
+        inventoryRepository.save(inventory);
     }
 }
