@@ -15,7 +15,7 @@ public class ProcurementLineItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String skuCode; // Ürün kodu (iPhone_13_Red)
-    private BigDecimal price; // Fiyat
-    private Integer quantity; // Adet
+    private String skuCode;
+    private BigDecimal price;
+    private Integer quantity;
 }
